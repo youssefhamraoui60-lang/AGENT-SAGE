@@ -22,6 +22,23 @@ Conserver le ZIP privé dans un emplacement protégé. Il n'est pas chiffré et 
 doit jamais être ajouté au dépôt public. Les mots de passe et clés n8n présents
 dans les dumps et `.env` donnent accès à des données réelles.
 
+La version GitHub Backup V1 est publiée comme plusieurs fichiers chiffrés
+AES-256-GCM dans la release `Backup V1 - 2026-11-14`. Elle est inutilisable sans
+la clé privée séparée, conservée hors de GitHub. Télécharger tous les assets dans
+un seul dossier, récupérer `scripts/restore_encrypted_release_v1.py` depuis le
+dépôt public, puis :
+
+```powershell
+python scripts/restore_encrypted_release_v1.py `
+  --parts C:\Restauration\Backup-V1 `
+  --key-file C:\Secrets\AGENT-SAGE-BACKUP-V1-2026-11-14.key `
+  --output C:\Restauration\AGENT-SAGE-BACKUP-V1.zip
+```
+
+La clé est un secret de récupération indispensable : conserver une copie
+distincte de la machine et de GitHub. Les parties utilisent une authentification
+cryptographique ; toute partie manquante ou modifiée fait échouer le déchiffrement.
+
 ## 2. Vérifier avant extraction
 
 Comparer `Get-FileHash -Algorithm SHA256 <archive.zip>` avec le fichier
