@@ -1,0 +1,26 @@
+{
+  "NOTICE": "INACTIVE. No activation or SAVE authorized. Fill real evidence after verified SOAP reads and business review.",
+  "temporary_admin_test": true,
+  "expires_at": "2000-01-01T00:00:00+00:00",
+  "folder": "TEST",
+  "solution": "V12",
+  "pool": "POOL_AI_TEST",
+  "base_url": "https://sage:8443",
+  "scope": {"resource": "articles", "action": "create", "keys": {"ITMREF": "TESTAGENT004"}},
+  "credentials_rotated": false,
+  "dedicated_account_verified": false,
+  "http_login_sha256": "ACTUAL_ADMIN_LOGIN_HASH",
+  "x3_login_sha256": "ACTUAL_POOL_USER_HASH",
+  "permissions": {
+    "articles": {
+      "create": {
+        "rights_verified": false,
+        "business_rules_reviewed": false,
+        "manual_keys_preserved": false,
+        "description_sha256": "LIVE_DESCRIPTION_HASH",
+        "rights_evidence": {"path": "REVIEWED_RIGHTS_FILE", "sha256": "REAL_HASH"},
+        "business_rules_evidence": {"path": "REVIEWED_TEST_RULES_JSON", "sha256": "REAL_HASH"}
+      }
+    }
+  }
+}

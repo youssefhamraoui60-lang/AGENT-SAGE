@@ -1,0 +1,9 @@
+#cloud-config
+hostname: agent-sage-docker
+manage_etc_hosts: true
+users:
+  - default
+ssh_authorized_keys:
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPpPKho7D4yzqycW6Mmqh8jHL0mGulv7Ypuw8efPqe/G agent-sage-x3-vm
+ssh_pwauth: false
+disable_root: true

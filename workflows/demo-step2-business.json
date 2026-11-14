@@ -1,0 +1,114 @@
+{
+  "name": "ETAPE 2 - Analyse locale et attente de validation",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "nodes": [
+    {
+      "id": "entry",
+      "name": "Demande de test",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "7916cf4331fc16a31d8978a6bc5836bd",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agent-sage-step2-5ef01a0bf9c6",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "analyze",
+      "name": "Analyse et controles FastAPI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/v1/ai/analyze",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({demande: $json.body.demande}) }}",
+        "options": {
+          "timeout": 420000
+        }
+      }
+    },
+    {
+      "id": "read",
+      "name": "Relire la demande PostgreSQL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'http://127.0.0.1:8000/api/v1/ai/requests/' + $json.id }}",
+        "options": {
+          "timeout": 15000
+        }
+      }
+    },
+    {
+      "id": "return",
+      "name": "Resultat en attente de validation",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Demande de test": {
+      "main": [
+        [
+          {
+            "node": "Analyse et controles FastAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyse et controles FastAPI": {
+      "main": [
+        [
+          {
+            "node": "Relire la demande PostgreSQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Relire la demande PostgreSQL": {
+      "main": [
+        [
+          {
+            "node": "Resultat en attente de validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "id": "noaq7F66YoO2Ai6h",
+  "active": false
+}

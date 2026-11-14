@@ -1,0 +1,19 @@
+{
+  "status": "INACTIVE_PENDING_INDEPENDENT_ADMIN_CONFIRMATION",
+  "server": "tcp:sage,1433",
+  "database": "x3v12",
+  "authentication": "SQL_SERVER_CREDENTIAL_FROM_PRIVATE_STORE",
+  "provider_required": "Supported Microsoft.Data.SqlClient release with ServerCertificate exact matching (5.1+ feature); not System.Data.SqlClient",
+  "encrypt": "Mandatory",
+  "trust_server_certificate": false,
+  "server_certificate_candidate": "C:/AGENT-SAGE-X3/runtime/sql-presented-certificate-0.pem",
+  "observed_sha256": "8a6717d1ab82e4279cc0895de89e119880fe13adaf39f0b56ab47ad64b2657f7",
+  "administrator_confirmed_sha256": null,
+  "administrator_confirmed_at": null,
+  "certificate_validation_mode": "EXACT_CERTIFICATE_MATCH_NOT_CA_DNS_VALIDATION",
+  "application_intent": "ReadOnly",
+  "connection_timeout_seconds": 6,
+  "command_timeout_seconds": 5,
+  "pooling": false,
+  "enabled": false
+}

@@ -1,0 +1,88 @@
+{
+    "name":  "Demo extraction VM Ubuntu - tunnel SSH",
+    "active":  false,
+    "nodes":  [
+                  {
+                      "id":  "webhook",
+                      "name":  "Webhook test",
+                      "type":  "n8n-nodes-base.webhook",
+                      "typeVersion":  2,
+                      "position":  [
+                                       0,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "httpMethod":  "POST",
+                                         "path":  "demo-extraction",
+                                         "responseMode":  "responseNode",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "backend",
+                      "name":  "Backend FastAPI",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       240,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "http://127.0.0.1:18000/api/ai/extract",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({demande: $json.body.demande}) }}",
+                                         "options":  {
+                                                         "timeout":  240000
+                                                     }
+                                     }
+                  },
+                  {
+                      "id":  "response",
+                      "name":  "Reponse JSON",
+                      "type":  "n8n-nodes-base.respondToWebhook",
+                      "typeVersion":  1.4,
+                      "position":  [
+                                       480,
+                                       0
+                                   ],
+                      "parameters":  {
+                                         "respondWith":  "json",
+                                         "responseBody":  "={{ $json }}",
+                                         "options":  {
+
+                                                     }
+                                     }
+                  }
+              ],
+    "connections":  {
+                        "Webhook test":  {
+                                             "main":  [
+                                                          [
+                                                              {
+                                                                  "node":  "Backend FastAPI",
+                                                                  "type":  "main",
+                                                                  "index":  0
+                                                              }
+                                                          ]
+                                                      ]
+                                         },
+                        "Backend FastAPI":  {
+                                                "main":  [
+                                                             [
+                                                                 {
+                                                                     "node":  "Reponse JSON",
+                                                                     "type":  "main",
+                                                                     "index":  0
+                                                                 }
+                                                             ]
+                                                         ]
+                                            }
+                    },
+    "settings":  {
+                     "executionOrder":  "v1"
+                 }
+}

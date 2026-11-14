@@ -1,0 +1,76 @@
+name: agent-sage-x3
+services:
+  postgres:
+    image: postgres:17.6-bookworm
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+      POSTGRES_DB: ${POSTGRES_DB:?required}
+      N8N_DB_PASSWORD: ${N8N_DB_PASSWORD:?required}
+    ports: ["127.0.0.1:${DB_PORT:-55432}:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/001-schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+      - ./database/002-n8n.sh:/docker-entrypoint-initdb.d/002-n8n.sh:ro
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks: [services]
+    restart: "no"
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      OLLAMA_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:7b}
+    ports: ["127.0.0.1:${BACKEND_PORT:-8000}:8000"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks: [services, hostaccess]
+    restart: "no"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  n8n:
+    image: n8nio/n8n:2.43.7
+    environment:
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: n8n
+      DB_POSTGRESDB_USER: n8n
+      DB_POSTGRESDB_PASSWORD: ${N8N_DB_PASSWORD:?required}
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?required}
+      N8N_HOST: localhost
+      N8N_PROTOCOL: http
+      N8N_SECURE_COOKIE: "false"
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      GENERIC_TIMEZONE: Europe/Paris
+    ports: ["127.0.0.1:${N8N_PORT:-5678}:5678"]
+    volumes: [n8ndata:/home/node/.n8n]
+    depends_on:
+      postgres: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:5678/healthz/readiness').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    networks: [services]
+    restart: "no"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+networks:
+  services: {internal: true}
+  hostaccess: {}
+volumes:
+  pgdata:
+  n8ndata:

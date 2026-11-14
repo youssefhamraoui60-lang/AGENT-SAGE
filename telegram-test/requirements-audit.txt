@@ -1,0 +1,2 @@
+# Excel quality audit only; not needed by the live Telegram listener.
+openpyxl>=3.1,<4

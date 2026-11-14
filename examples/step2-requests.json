@@ -1,0 +1,7 @@
+{
+  "analyze": {"demande": "Créer les articles Câble souple 4x50 mm RVK NOIR, unité, FG, fournisseur SOTAMO et Cosse à sertir SC 70-10, unité, FG, fournisseur SOTAMO."},
+  "check_duplicates": {"designation": "Cosse à sertir SC 70-10", "type_objet": "article", "limit": 5},
+  "corrections": {"revision_attendue": 1, "acteur": "operateur-local", "raison": "Unité confirmée par le demandeur", "articles": [{"index": 0, "champs": {"unite": "UN"}}]},
+  "decision": {"revision_attendue": 2, "decision": "approve", "acteur": "operateur-local", "raison": "Contrôles locaux examinés humainement"},
+  "notes": ["Exemples fictifs, aucun code Sage validé.", "Les corrections et décisions exigent le secret X-Approval-Token, jamais un jeton placé dans ce fichier.", "Une approbation est refusée tant que les règles du déploiement ne sont pas validées.", "Aucune exécution Sage n'est possible."]
+}

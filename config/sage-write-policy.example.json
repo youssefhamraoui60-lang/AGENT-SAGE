@@ -1,0 +1,24 @@
+{
+  "NOTICE": "INACTIVE EXAMPLE. Never enable without administrator evidence and individually approved live tests.",
+  "expires_at": "2000-01-01T00:00:00+00:00",
+  "folder": "TEST",
+  "solution": "V12",
+  "pool": "POOL_AI_TEST",
+  "base_url": "https://sage:8443",
+  "credentials_rotated": false,
+  "dedicated_account_verified": false,
+  "http_login_sha256": "TO_BE_CONFIRMED_BY_ADMINISTRATOR",
+  "x3_login_sha256": "TO_BE_CONFIRMED_BY_ADMINISTRATOR",
+  "permissions": {
+    "articles": {
+      "create": {
+        "rights_verified": false,
+        "business_rules_reviewed": false,
+        "manual_keys_preserved": false,
+        "description_sha256": "CURRENT_PUBLICATION_HASH_REQUIRED",
+        "rights_evidence": {"path": "ABSOLUTE_PRIVATE_ADMIN_EXPORT_PATH", "sha256": "REQUIRED"},
+        "business_rules_evidence": {"path": "ABSOLUTE_PRIVATE_BUSINESS_REVIEW_PATH", "sha256": "REQUIRED"}
+      }
+    }
+  }
+}

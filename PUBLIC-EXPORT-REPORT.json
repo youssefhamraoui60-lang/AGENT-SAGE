@@ -1,0 +1,19 @@
+{
+  "files": 827,
+  "redacted_files": [
+    "scripts/run_offline_regression.py",
+    "scripts/test_native_workflow.py",
+    "TEST/test_accounts_storage.py"
+  ],
+  "excluded_large_or_private_key_files": [],
+  "private_data_included": false,
+  "repository": "https://github.com/youssefhamraoui60-lang/AGENT-SAGE.git",
+  "final_python_syntax_files": 563,
+  "final_python_syntax_errors": 0,
+  "configured_secret_scan": "PASS",
+  "private_archive_included": false,
+  "github_protection_exclusions": [
+    "TEST/test_default_article_code.py"
+  ],
+  "exclusion_reason": "GitHub push protection flags literal expected article references in this test. Private application backup unchanged."
+}

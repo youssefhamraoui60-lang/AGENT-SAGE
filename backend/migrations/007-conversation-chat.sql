@@ -1,0 +1,5 @@
+CREATE TABLE chat_web_sessions(token_hash text PRIMARY KEY, owner_id uuid NOT NULL, role text NOT NULL CHECK(role IN ('operator','reader')), expires_at timestamptz NOT NULL, created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE chat_conversations(id uuid PRIMARY KEY,owner_id uuid NOT NULL,title text NOT NULL,revision integer NOT NULL DEFAULT 1,state jsonb NOT NULL DEFAULT '{"articles":[],"asked":[]}',created_at timestamptz NOT NULL DEFAULT now(),updated_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX chat_owner_history ON chat_conversations(owner_id,updated_at DESC);
+CREATE TABLE chat_messages(id bigserial PRIMARY KEY,conversation_id uuid NOT NULL REFERENCES chat_conversations(id),role text NOT NULL CHECK(role IN ('user','assistant','tool','system')),content text NOT NULL,payload jsonb NOT NULL DEFAULT '{}',created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE chat_business_examples(id bigserial PRIMARY KEY,owner_id uuid NOT NULL,conversation_id uuid NOT NULL REFERENCES chat_conversations(id),snapshot jsonb NOT NULL,source text NOT NULL DEFAULT 'human_reviewed_example_not_rule',created_at timestamptz NOT NULL DEFAULT now());

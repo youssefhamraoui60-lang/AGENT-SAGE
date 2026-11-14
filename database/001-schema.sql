@@ -1,0 +1,5 @@
+CREATE TABLE users (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, username text UNIQUE NOT NULL, created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE article_requests (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, request_text text NOT NULL, extracted_data jsonb, status text NOT NULL DEFAULT 'pending', created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE supplier_requests (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, supplier_name text NOT NULL, status text NOT NULL DEFAULT 'pending', created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE approval_requests (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, article_request_id bigint REFERENCES article_requests(id), supplier_request_id bigint REFERENCES supplier_requests(id), reviewer_id bigint REFERENCES users(id), status text NOT NULL DEFAULT 'pending', created_at timestamptz NOT NULL DEFAULT now(), CHECK (num_nonnulls(article_request_id,supplier_request_id)=1));
+CREATE TABLE agent_execution_logs (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, event text NOT NULL, details jsonb NOT NULL DEFAULT '{}', created_at timestamptz NOT NULL DEFAULT now());
